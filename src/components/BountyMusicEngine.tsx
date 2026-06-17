@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Volume2, Music, Sparkles } from 'lucide-react';
+import { Play, Pause, RotateCcw, Music, Sparkles } from 'lucide-react';
 
 interface LyricLine {
   time: number;
@@ -60,7 +60,7 @@ export default function BountyMusicEngine() {
 
   const initAudio = () => {
     if (audioContextRef.current) return;
-    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new AudioCtx();
     const analyser = ctx.createAnalyser();
     analyser.fftSize = 64;
@@ -406,7 +406,7 @@ export default function BountyMusicEngine() {
             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">Synth Lead</span>
             <select
               value={synthType}
-              onChange={(e: any) => setSynthType(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSynthType(e.target.value as 'sawtooth' | 'square' | 'triangle')}
               className="bg-[#030712] border border-white/[0.06] rounded-md text-[10px] text-slate-350 py-1 px-2 focus:outline-none focus:border-neon-cyan"
             >
               <option value="sawtooth">Retro (Saw)</option>

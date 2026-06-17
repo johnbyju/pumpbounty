@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Terminal, Shield, Zap, Filter, Bell, ToggleLeft, ToggleRight, AlertCircle, RefreshCw } from 'lucide-react';
+import { Terminal, Zap, Filter, Bell, ToggleLeft, ToggleRight, AlertCircle, RefreshCw } from 'lucide-react';
 
 interface BountyItem {
   id: string;
@@ -37,8 +37,30 @@ const MOCK_TITLES = [
 
 const TASK_TYPES = ['Socials', 'Video', 'Follow', 'Creative'] as const;
 
+const createRandomBounty = (id: string): BountyItem => {
+  const token = MOCK_TOKENS[Math.floor(Math.random() * MOCK_TOKENS.length)];
+  const title = MOCK_TITLES[Math.floor(Math.random() * MOCK_TITLES.length)];
+  const taskType = TASK_TYPES[Math.floor(Math.random() * TASK_TYPES.length)];
+  const reward = parseFloat((0.1 + Math.random() * 2.5).toFixed(2));
+  const nsfw = Math.random() < 0.15; // 15% chance NSFW
+
+  return {
+    id,
+    tokenName: token.name,
+    tokenSymbol: token.symbol,
+    title,
+    reward,
+    taskType,
+    nsfw,
+    submissions: 0, // Sniper targets zero-submission items
+    timeLabel: 'Just now'
+  };
+};
+
 export default function BountySniperDashboard() {
-  const [bounties, setBounties] = useState<BountyItem[]>([]);
+  const [bounties, setBounties] = useState<BountyItem[]>(() =>
+    Array.from({ length: 4 }).map((_, idx) => createRandomBounty(`init-${idx}`))
+  );
   const [minReward, setMinReward] = useState(0.2);
   const [allowNsfw, setAllowNsfw] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(['Socials', 'Video', 'Follow', 'Creative']);
@@ -52,10 +74,6 @@ export default function BountySniperDashboard() {
 
   // Auto-generate new bounties in real-time
   useEffect(() => {
-    // Generate initial items
-    const initialItems: BountyItem[] = Array.from({ length: 4 }).map((_, idx) => createRandomBounty(`init-${idx}`));
-    setBounties(initialItems);
-
     let idCounter = 0;
     const interval = setInterval(() => {
       idCounter++;
@@ -94,26 +112,6 @@ export default function BountySniperDashboard() {
 
     return () => clearInterval(interval);
   }, [minReward, allowNsfw, activeFilters, autoSnipe]);
-
-  const createRandomBounty = (id: string): BountyItem => {
-    const token = MOCK_TOKENS[Math.floor(Math.random() * MOCK_TOKENS.length)];
-    const title = MOCK_TITLES[Math.floor(Math.random() * MOCK_TITLES.length)];
-    const taskType = TASK_TYPES[Math.floor(Math.random() * TASK_TYPES.length)];
-    const reward = parseFloat((0.1 + Math.random() * 2.5).toFixed(2));
-    const nsfw = Math.random() < 0.15; // 15% chance NSFW
-
-    return {
-      id,
-      tokenName: token.name,
-      tokenSymbol: token.symbol,
-      title,
-      reward,
-      taskType,
-      nsfw,
-      submissions: 0, // Sniper targets zero-submission items
-      timeLabel: 'Just now'
-    };
-  };
 
   const toggleFilter = (filter: string) => {
     setActiveFilters(prev => 
