@@ -1,6 +1,7 @@
 import { Target, Zap, Shield, Terminal, Filter } from 'lucide-react';
 import BountyMusicEngine from '../components/BountyMusicEngine';
 import BountySniperDashboard from '../components/BountySniperDashboard';
+import HeaderPlayerControl from '../components/HeaderPlayerControl';
 
 export default function Home() {
   return (
@@ -31,6 +32,7 @@ export default function Home() {
         </nav>
 
         <div className="flex items-center gap-4">
+          <HeaderPlayerControl />
         </div>
       </header>
 

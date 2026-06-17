@@ -292,6 +292,16 @@ export default function BountyMusicEngine() {
     }
   };
 
+  useEffect(() => {
+    const handler = () => handlePlayToggle();
+    window.addEventListener('bounty-music-toggle', handler);
+    return () => window.removeEventListener('bounty-music-toggle', handler);
+  }, [isPlaying]);
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('bounty-music-sync', { detail: { isPlaying } }));
+  }, [isPlaying]);
+
   // Sync timeline clock and highlight lyrics
   useEffect(() => {
     let interval: number;
@@ -458,11 +468,18 @@ export default function BountyMusicEngine() {
           {/* Action Row Buttons */}
           <div className="flex items-center gap-3">
             <button
+              onClick={handlePlayToggle}
+              className="w-full flex items-center justify-center gap-2 py-3 border border-white/[0.06] hover:bg-white/[0.03] text-slate-400 hover:text-white rounded-lg transition-colors text-xs font-black uppercase tracking-wider"
+              title={isPlaying ? "Pause Track" : "Play Track"}
+            >
+              {isPlaying ? <><Pause size={14} /> Pause</> : <><Play size={14} /> Play</>}
+            </button>
+            <button
               onClick={handleReset}
               className="w-full flex items-center justify-center gap-2 py-3 border border-white/[0.06] hover:bg-white/[0.03] text-slate-400 hover:text-white rounded-lg transition-colors text-xs font-black uppercase tracking-wider"
               title="Reset Track"
             >
-              <RotateCcw size={14} /> Reset / Replay Track
+              <RotateCcw size={14} /> Reset
             </button>
           </div>
         </div>
