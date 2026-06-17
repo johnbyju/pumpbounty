@@ -58,9 +58,7 @@ const createRandomBounty = (id: string): BountyItem => {
 };
 
 export default function BountySniperDashboard() {
-  const [bounties, setBounties] = useState<BountyItem[]>(() =>
-    Array.from({ length: 4 }).map((_, idx) => createRandomBounty(`init-${idx}`))
-  );
+  const [bounties, setBounties] = useState<BountyItem[]>([]);
   const [minReward, setMinReward] = useState(0.2);
   const [allowNsfw, setAllowNsfw] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(['Socials', 'Video', 'Follow', 'Creative']);
@@ -71,6 +69,14 @@ export default function BountySniperDashboard() {
     '[System] Filters configured. Sniper is active.'
   ]);
   const [totalClaimed, setTotalClaimed] = useState(14.85);
+
+  // Initialize bounties only on the client-side to prevent SSR hydration mismatch
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setBounties(Array.from({ length: 4 }).map((_, idx) => createRandomBounty(`init-${idx}`)));
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Auto-generate new bounties in real-time
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Target, Zap, Shield, ArrowRight, Terminal, Filter } from 'lucide-react';
+import { Target, Zap, Shield, Terminal, Filter } from 'lucide-react';
 import BountyMusicEngine from '../components/BountyMusicEngine';
 import BountySniperDashboard from '../components/BountySniperDashboard';
 
@@ -31,14 +31,6 @@ export default function Home() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <a 
-            href="https://t.me/pumpbountybot" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-neon-green to-neon-cyan hover:brightness-110 text-[#030712] rounded-xl text-xs font-black transition-all shadow-[0_4px_20px_rgba(0,255,135,0.2)] active:scale-98"
-          >
-            Launch Bot <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
-          </a>
         </div>
       </header>
 

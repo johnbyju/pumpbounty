@@ -422,18 +422,28 @@ export default function BountyMusicEngine() {
         {/* Left Column: Player Controls & Visualizer Canvas */}
         <div className="lg:col-span-5 flex flex-col gap-4 bg-[#030712]/50 border border-white/[0.04] p-5 rounded-xl justify-between">
           <div className="flex flex-col gap-3">
-            {/* Visualizer Canvas */}
-            <div className="w-full h-32 rounded-lg bg-[#030712] border border-white/[0.03] overflow-hidden relative flex items-center justify-center">
+            {/* Visualizer Canvas (Clickable to Play/Pause) */}
+            <div 
+              onClick={handlePlayToggle}
+              className="w-full h-32 rounded-lg bg-[#030712] border border-white/[0.03] overflow-hidden relative flex items-center justify-center cursor-pointer hover:border-white/[0.08] transition-colors group"
+            >
               <canvas 
                 ref={canvasRef} 
                 className="w-full h-full object-cover"
                 width={300}
                 height={128}
               />
-              {!isPlaying && (
-                <div className="absolute text-[10px] font-mono text-slate-600 flex flex-col items-center gap-1.5 uppercase select-none">
-                  <RotateCcw size={16} className="animate-spin duration-3000" />
-                  <span>Click Play to Generate Audio</span>
+              {!isPlaying ? (
+                <div className="absolute text-[10px] font-mono text-slate-500 group-hover:text-slate-350 flex flex-col items-center gap-1.5 uppercase select-none transition-colors">
+                  <Play size={16} className="fill-current text-neon-green" />
+                  <span>Click here to Play Song</span>
+                </div>
+              ) : (
+                <div className="absolute inset-0 bg-[#030712]/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                  <div className="text-[10px] font-mono text-slate-350 flex flex-col items-center gap-1.5 uppercase select-none">
+                    <Pause size={16} className="fill-current text-red-400" />
+                    <span>Click here to Pause</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -448,25 +458,11 @@ export default function BountyMusicEngine() {
           {/* Action Row Buttons */}
           <div className="flex items-center gap-3">
             <button
-              onClick={handlePlayToggle}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all shadow-lg active:scale-98 ${
-                isPlaying 
-                  ? 'bg-red-950/20 border border-red-900/40 text-red-400 hover:bg-red-950/30' 
-                  : 'bg-gradient-to-r from-neon-green to-neon-cyan text-[#030712] hover:brightness-110 shadow-neon-green/10'
-              }`}
-            >
-              {isPlaying ? (
-                <><Pause size={14} className="fill-current" /> Pause Song</>
-              ) : (
-                <><Play size={14} className="fill-current" /> Play Song</>
-              )}
-            </button>
-            <button
               onClick={handleReset}
-              className="p-3 border border-white/[0.06] hover:bg-white/[0.03] text-slate-400 hover:text-white rounded-lg transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3 border border-white/[0.06] hover:bg-white/[0.03] text-slate-400 hover:text-white rounded-lg transition-colors text-xs font-black uppercase tracking-wider"
               title="Reset Track"
             >
-              <RotateCcw size={14} />
+              <RotateCcw size={14} /> Reset / Replay Track
             </button>
           </div>
         </div>
